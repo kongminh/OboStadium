@@ -225,17 +225,17 @@ function resetModal() {
   })
 }
 
-function signedValidate(status = false, fullname = '') {
+function signedValidate(accountLabel, status = false, fullname = '') {
   if (status == true) {
     isLogined = true;
     let signedLink = `
-  <a id="account-setting" class="nav-link account-setting" href="/tai-khoan">Xin chào ${fullname}</a>`;
+  <a id="account-setting" class="nav-link account-setting" href="/tai-khoan">${fullname}</a>`;
 
     $('.account-setting').replaceWith(signedLink);
   } else {
     isLogined = false;
     let notSignedLink = `
-  <a class="nav-link account-setting" href="" data-toggle="modal" data-target="#signInSignUp">Tài khoản</a>
+  <a class="nav-link account-setting" href="" data-toggle="modal" data-target="#signInSignUp">${accountLabel}</a>
   `;
     $('.account-setting').replaceWith(notSignedLink);
   }

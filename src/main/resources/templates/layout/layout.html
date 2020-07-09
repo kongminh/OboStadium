@@ -57,10 +57,14 @@
 
             $(function () {
                 if (isLogined == true) {
-                    signedValidate(true, [[${user_fullname}]]);
+                    signedValidate([[#{common.label.account}]], true, [[#{common.label.welcome}]] + ' ' + [[${user_fullname}]]);
                 } else {
-                    signedValidate();
+                    signedValidate([[#{common.label.account}]]);
                 }
+            })
+            $('#languageSelect').on('change', function () {
+                location.href = location.protocol + '//' + location.host + location.pathname
+                                + '?lang=' + $('#languageSelect').val()
             })
         </script>
         <!-- Common JS-->
