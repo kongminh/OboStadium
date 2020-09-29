@@ -35,6 +35,25 @@ public class ManageProductController {
     @Autowired
     private BrandService brandService;
 
+    @GetMapping("/admin/restProducts")
+    @ResponseBody
+    public PageableDto getProductManageRest(@RequestParam(defaultValue = "1") int page,
+                                       @RequestParam(defaultValue = "product.created_at") String order,
+                                       @RequestParam(defaultValue = "desc") String direction,
+                                       @RequestParam(defaultValue = "") String id,
+                                       @RequestParam(defaultValue = "") String name,
+                                       @RequestParam(defaultValue = "%%") String brand,
+                                       @RequestParam(defaultValue = "%%") String category) {
+        if (!direction.toLowerCase().equals("desc")) {
+            direction = "asc";
+        }
+
+        // Get list product
+        PageableDto rs = productService.adminGetListProduct(id, name, category, brand, order, direction, page);
+
+        return rs;
+    }
+
     @GetMapping("/admin/products")
     public String getProductManagePage(Model model,
                                        @RequestParam(defaultValue = "1") int page,
