@@ -22,7 +22,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     private JwtTokenUtil jwtTokenUtil;
 
     @Autowired
-    private UserDetailsService userDetailsService;
+    private JwtUserDetailsService jwtUserDetailsService;
 
     private static String HEADER = "Authorization";
 
@@ -62,7 +62,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         String username = claims.getSubject();
 
         if (username != null) {
-            UserDetails user = userDetailsService.loadUserByUsername(username);
+            UserDetails user = jwtUserDetailsService.loadUserByUsername(username);
             return new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
         }
         return null;

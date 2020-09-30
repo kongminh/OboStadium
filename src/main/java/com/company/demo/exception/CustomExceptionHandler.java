@@ -1,5 +1,6 @@
 package com.company.demo.exception;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
+@Slf4j
 @RestControllerAdvice
 public class CustomExceptionHandler {
     @ExceptionHandler(NotFoundException.class)
@@ -55,6 +57,7 @@ public class CustomExceptionHandler {
     public ResponseEntity<?> handlerException(Exception ex, WebRequest req) {
         // Log err
 
+        log.error(ex.getMessage(), ex);
         ErrorResponse err = new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
         return new ResponseEntity<>(err, HttpStatus.INTERNAL_SERVER_ERROR);
     }
