@@ -24,6 +24,8 @@ public class CustomExceptionHandler {
     public ResponseEntity<?> handlerNotFoundException(NotFoundException ex, WebRequest req) {
         // Log err
 
+        log.error(ex.getMessage(), ex);
+
         ErrorResponse err = new ErrorResponse(HttpStatus.NOT_FOUND, ex.getMessage());
         return new ResponseEntity<>(err, HttpStatus.NOT_FOUND);
     }

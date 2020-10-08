@@ -1,6 +1,7 @@
 package com.company.demo.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -15,6 +16,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @EnableWebSecurity
 @Configuration
@@ -48,6 +52,7 @@ public class WebSecurityConfig<CustomUserDetailService> extends WebSecurityConfi
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .cors()
+                .configurationSource(this.corsConfigurationSource())
                 .and()
                 .csrf()
                 .disable()
@@ -75,5 +80,28 @@ public class WebSecurityConfig<CustomUserDetailService> extends WebSecurityConfi
         web
                 .ignoring()
                 .antMatchers("/css/**", "/script/**", "/image/**", "/vendor/**", "/favicon.ico", "/adminlte/**", "/media/static/**");
+    }
+
+
+    @Value("${app.cors.allowedOrigins:*}")
+    private String[] corsAllowedOrigins;
+
+    protected CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration corsConfiguration = new CorsConfiguration();
+        corsConfiguration.addAllowedMethod(CorsConfiguration.ALL);
+        corsConfiguration.addAllowedHeader(CorsConfiguration.ALL);
+        corsConfiguration.addExposedHeader("Authorization");
+        corsConfiguration.addExposedHeader("approveStatus");
+        corsConfiguration.addExposedHeader("temporaryFile");
+        corsConfiguration.addExposedHeader("timeVersion");
+        for (String allowed : corsAllowedOrigins) {
+            corsConfiguration.addAllowedOrigin(allowed);
+        }
+        corsConfiguration.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource corsSource = new UrlBasedCorsConfigurationSource();
+        corsSource.registerCorsConfiguration("/**", corsConfiguration);
+
+        return corsSource;
     }
 }
